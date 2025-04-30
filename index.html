@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Comanda QR - Restaurante</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+      <h1 id="titulo-comanda">Comanda</h1> <!-- Título que será atualizado -->
+      <div class="menu" id="menu"></div>
+      <h2>Seu Pedido</h2>
+      <ul id="pedido"></ul>
+      <p>Total: R$ <span id="total">0.00</span></p>
+      <button onclick="finalizarPedido()">Pagar</button>
+    </div>
+  
+    <!-- Popup de pagamento -->
+    <div id="popup" class="popup" style="display:none">
+        <div class="popup-content">
+          <span class="close" onclick="fecharPopup()">&times;</span>
+          <h3>Escaneie o QR Code para pagar</h3>
+          <img src="img/qrcode-pix.png" alt="QR Pix" class="qr-img"/>
+          <button onclick="confirmarPagamento()">Sair</button>
+        </div>
+    </div>
+  
+    <!-- Popup de agradecimento -->
+    <div id="agradecimentoPopup" class="popup" style="display:none">
+      <div class="popup-content">
+        <h3>Obrigado por comprar conosco!</h3>
+        <p id="mensagem-agradecimento">Por favor, apresente o comprovante de pagamento na saída.</p>
+        <button onclick="fecharAgradecimento()">OK</button>
+      </div>
+    </div>
+  
+    <script src="index.js"></script>
+</body>
+</html>
