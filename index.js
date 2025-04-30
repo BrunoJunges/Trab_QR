@@ -41,27 +41,27 @@ function adicionarItem(nome, preco) {
 }
 
 function gerarPDF(pedido, total) {
-    console.log("Gerando PDF com os seguintes dados:", pedido, total); // Log para depuração
+    console.log("Gerando PDF com os seguintes dados:", pedido, total); 
     try {
-        const { jsPDF } = window.jspdf;  // Carrega o jsPDF corretamente
+        const { jsPDF } = window.jspdf;  
         const doc = new jsPDF();
         
         doc.setFontSize(16);
         doc.text(`Comanda - Mesa ${numeroMesa}`, 10, 10);
         doc.setFontSize(12);
 
-        let y = 20; // Posição inicial no eixo Y
+        let y = 20; 
         pedido.forEach(item => {
-            console.log(`Adicionando item: ${item.nome} - R$ ${item.preco.toFixed(2)}`); // Log para depuração
+            console.log(`Adicionando item: ${item.nome} - R$ ${item.preco.toFixed(2)}`); 
             doc.text(`${item.nome} - R$ ${item.preco.toFixed(2)}`, 10, y);
-            y += 10; // Incrementa a posição Y para o próximo item
+            y += 10; 
         });
 
-        // Adiciona o total
-        console.log(`Total: R$ ${total.toFixed(2)}`); // Log para depuração
+       
+        console.log(`Total: R$ ${total.toFixed(2)}`); 
         doc.text(`Total: R$ ${total.toFixed(2)}`, 10, y + 10);
 
-        // Salva o PDF
+        
         doc.save(`comanda_mesa_${numeroMesa}.pdf`);
     } catch (e) {
         console.error("Erro ao gerar o PDF:", e);
@@ -69,14 +69,14 @@ function gerarPDF(pedido, total) {
 }
 
 function finalizarPedido() {
-    console.log("Finalizando pedido..."); // Log para depuração
-    console.log("Pedido atual:", pedido); // Log para depuração
-    console.log("Total atual:", total); // Log para depuração
+    console.log("Finalizando pedido..."); 
+    console.log("Pedido atual:", pedido); 
+    console.log("Total atual:", total); 
 
     const popup = document.getElementById('popup');
     if (popup) {
-        popup.style.display = 'block'; // Exibe o popup de pagamento
-        gerarPDF(pedido, total); // Chama a função para gerar o PDF
+        popup.style.display = 'block'; 
+        gerarPDF(pedido, total); 
     } else {
         console.error('Elemento com id "popup" não encontrado.');
     }
