@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pedidos da Cozinha</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff3e0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #e65100;
+    }
+    .pedido {
+      background-color: #ffe0b2;
+      border: 1px solid #e65100;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .mesa {
+      font-size: 20px;
+      font-weight: bold;
+      color: #d84315;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #d84315;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #bf360c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pedidos Recebidos</h1>
+  <div id="pedidos"></div>
+
+  <script>
+    async function carregarPedidos() {
+      try {
+        const res = await fetch("http://192.168.221.2:3000/pedidos");
+        const pedidos = await res.json();
+
+        const container = document.getElementById("pedidos");
+        container.innerHTML = "";
+
+        pedidos
+          .filter(pedido => pedido.status !== "entregue") // só exibe pedidos não finalizados
+          .forEach(pedido => {
+            const div = document.createElement("div");
+            div.className = "pedido";
+
+            let html = `<div class="mesa">Mesa ${pedido.mesa}</div><ul>`;
+            pedido.itens.forEach(item => {
+              html += `<li>${item.nome} - R$ ${item.preco.toFixed(2)}</li>`;
+            });
+            html += `</ul><strong>Total: R$ ${pedido.total.toFixed(2)}</strong><br><br>`;
+            html += `<button onclick="finalizarPedido('${pedido.id}', this)">Finalizar Pedido</button>`;
+
+            div.innerHTML = html;
+
+            container.appendChild(div);
+          });
+      } catch (err) {
+        console.error("Erro ao carregar pedidos:", err);
+      }
+    }
+
+    async function finalizarPedido(id, botao) {
+      try {
+        const res = await fetch(`http://192.168.221.2:3000/pedidos/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ status: "entregue" })
+        });
+
+        if (res.ok) {
+          botao.closest(".pedido").remove();
+        } else {
+          alert("Erro ao finalizar o pedido.");
+        }
+      } catch (error) {
+        console.error("Erro ao conectar com o servidor:", error);
+        alert("Erro ao conectar com o servidor.");
+      }
+    }
+
+    carregarPedidos();
+    setInterval(carregarPedidos, 5500);
+  </script>
+</body>
+</html>
+
