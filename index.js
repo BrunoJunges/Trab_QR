@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const numeroMesa = urlParams.get('mesa') || '1'; // Padrão é mesa 1
+const numeroMesa = urlParams.get('mesa') || '1';
 document.getElementById("titulo-comanda").textContent = `Comanda da Mesa ${numeroMesa}`;
 
 const menuItems = [
@@ -40,68 +40,43 @@ function adicionarItem(nome, preco) {
   totalSpan.textContent = total.toFixed(2);
 }
 
-function gerarPDF(pedido, total) {
-    console.log("Gerando PDF com os seguintes dados:", pedido, total); 
-    try {
-        const { jsPDF } = window.jspdf;  
-        const doc = new jsPDF();
-        
-        doc.setFontSize(16);
-        doc.text(`Comanda - Mesa ${numeroMesa}`, 10, 10);
-        doc.setFontSize(12);
+function fazerPedido() {
+  const dadosPedido = {
+    mesa: numeroMesa,
+    itens: pedido,
+    total: total,
+    status: "pendente" 
+  };
 
-        let y = 20; 
-        pedido.forEach(item => {
-            console.log(`Adicionando item: ${item.nome} - R$ ${item.preco.toFixed(2)}`); 
-            doc.text(`${item.nome} - R$ ${item.preco.toFixed(2)}`, 10, y);
-            y += 10; 
-        });
-
-       
-        console.log(`Total: R$ ${total.toFixed(2)}`); 
-        doc.text(`Total: R$ ${total.toFixed(2)}`, 10, y + 10);
-
-        
-        doc.save(`comanda_mesa_${numeroMesa}.pdf`);
-    } catch (e) {
-        console.error("Erro ao gerar o PDF:", e);
+  fetch('http://192.168.221.2:3000/pedidos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dadosPedido)
+  })
+  .then(response => {
+    if (response.ok) {
+      alert("Pedido enviado para a cozinha com sucesso!");
+      resetarComanda();
+    } else {
+      alert("Erro ao enviar pedido. Tente novamente.");
     }
+  })
+  
 }
 
-function finalizarPedido() {
-    console.log("Finalizando pedido..."); 
-    console.log("Pedido atual:", pedido); 
-    console.log("Total atual:", total); 
-
-    const popup = document.getElementById('popup');
-    if (popup) {
-        popup.style.display = 'block'; 
-        gerarPDF(pedido, total); 
-    } else {
-        console.error('Elemento com id "popup" não encontrado.');
-    }
+function abrirPopup() {
+  document.getElementById("popup").style.display = "block";
 }
 
 function fecharPopup() {
   document.getElementById("popup").style.display = "none";
-  resetarComanda();
 }
 
-function resetarComanda() {
+function limparComanda() {
   pedido = [];
   total = 0;
   pedidoUl.innerHTML = "";
   totalSpan.textContent = "0.00";
-}
-
-function fecharAgradecimento() {
-  document.getElementById("agradecimentoPopup").style.display = "none";
-  resetarComanda();
-}
-
-function confirmarPagamento() {
-  fecharPopup();
-  document.getElementById("agradecimentoPopup").style.display = "block";
-  document.getElementById("mensagem-agradecimento").textContent =
-    `Obrigado por comprar conosco! Por favor, apresente o comprovante de pagamento da Mesa ${numeroMesa} na saída.`;
 }
