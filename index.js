@@ -3,12 +3,12 @@ const numeroMesa = urlParams.get('mesa') || '1';
 document.getElementById("titulo-comanda").textContent = `Comanda da Mesa ${numeroMesa}`;
 
 const menuItems = [
-  { nome: "Hamburguer", preco: 25.00, imagem: "hambúrguer.png" },
-  { nome: "Pizza", preco: 35.00, imagem: "pizza.png" },
-  { nome: "Refrigerante", preco: 6.00, imagem: "refrigerante.png" },
-  { nome: "Massa Alho e Óleo", preco: 22.00, imagem: "massa.png" },
-  { nome: "Batata Frita", preco: 15.00, imagem: "batata.png" },
-  { nome: "À la Minuta", preco: 28.00, imagem: "minuta.png" }
+  { nome: "Hamburguer", preco: 25.00, imagem: "hambúrguer.png", descricao: "Pão artesanal, carne 180g, queijo e salada." },
+  { nome: "Pizza", preco: 35.00, imagem: "pizza.png", descricao: "Pizza média, 8 fatias, sabores variados." },
+  { nome: "Refrigerante", preco: 6.00, imagem: "refrigerante.png", descricao: "Lata 350ml de refrigerante gelado." },
+  {nome:innerHTML = "massa alho e <br> óleo", preco: 22.00, imagem: "massa.png", descricao: "Espaguete ao alho e óleo com toque de pimenta." },
+  { nome: "Batata Frita", preco: 15.00, imagem: "batata.png", descricao: "Porção média de batatas fritas crocantes." },
+  { nome: "À la Minuta", preco: 28.00, imagem: "minuta.png", descricao: "Prato com arroz, feijão, bife, ovo e salada." }
 ];
 
 let pedido = [];
@@ -18,15 +18,19 @@ const menuDiv = document.getElementById("menu");
 const pedidoUl = document.getElementById("pedido");
 const totalSpan = document.getElementById("total");
 
+// Criação dos cards com botão '?'
 menuItems.forEach(item => {
   const card = document.createElement("div");
   card.className = "card";
+
   card.innerHTML = `
+    <button class="info-btn" onclick="mostrarDescricao('${item.nome}', \`${item.descricao}\`)">?</button>
     <img src="img/${item.imagem}" alt="${item.nome}">
     <h3>${item.nome}</h3>
     <p>R$ ${item.preco.toFixed(2)}</p>
-    <button onclick="adicionarItem('${item.nome}', ${item.preco})">Adicionar</button>
+    <button class="add-btn" onclick="adicionarItem('${item.nome}', ${item.preco})">Adicionar</button>
   `;
+
   menuDiv.appendChild(card);
 });
 
@@ -45,10 +49,10 @@ function fazerPedido() {
     mesa: numeroMesa,
     itens: pedido,
     total: total,
-    status: "pendente" 
+    status: "aguardando"
   };
 
-  fetch('http://192.168.221.2:3000/pedidos', {
+  fetch('http://localhost:3000/pedidos', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -62,21 +66,32 @@ function fazerPedido() {
     } else {
       alert("Erro ao enviar pedido. Tente novamente.");
     }
-  })
-  
+  });
 }
 
-function abrirPopup() {
-  document.getElementById("popup").style.display = "block";
-}
-
-function fecharPopup() {
-  document.getElementById("popup").style.display = "none";
-}
-
-function limparComanda() {
+function resetarComanda() {
   pedido = [];
   total = 0;
   pedidoUl.innerHTML = "";
   totalSpan.textContent = "0.00";
+}
+
+// Função que cria o popup com a descrição do prato
+function mostrarDescricao(nome, descricao) {
+  // Verifica se já existe um popup aberto e remove para evitar múltiplos
+  const popupExistente = document.querySelector(".popup-descricao");
+  if (popupExistente) popupExistente.remove();
+
+  const popup = document.createElement("div");
+  popup.className = "popup-descricao";
+
+  popup.innerHTML = `
+    <div class="conteudo-popup">
+      <button class="fechar-popup" onclick="this.parentElement.parentElement.remove()">X</button>
+      <h2>${nome}</h2>
+      <p>${descricao}</p>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
 }
