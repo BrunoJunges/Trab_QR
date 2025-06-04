@@ -2,102 +2,214 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Pedidos da Cozinha</title>
+  <title>Interface da Cozinha</title>
   <style>
-    body {
+    /* --- CSS isolado para painel da cozinha --- */
+
+    .cozinha-body {
       font-family: Arial, sans-serif;
-      background-color: #fff3e0;
       padding: 20px;
+      background-color: #f3f3f3;
     }
-    h1 {
-      text-align: center;
-      color: #e65100;
-    }
-    .pedido {
-      background-color: #ffe0b2;
-      border: 1px solid #e65100;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    .mesa {
-      font-size: 20px;
+
+    .cozinha-title {
       font-weight: bold;
-      color: #d84315;
+      margin-bottom: 30px;
+      text-align: center;
     }
-    button {
-      margin-top: 10px;
-      padding: 8px 12px;
-      background-color: #d84315;
-      color: white;
-      border: none;
+
+    .cozinha-cabecalho-mesas {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .cozinha-cabecalho-mesas th {
+      width: 100px;
+      height: 100px;
+      font-weight: bold;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      color: black;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+    }
+
+    .cozinha-table {
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      background-color: white;
+      border-collapse: separate;
+      border-spacing: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .cozinha-corpo-pedidos tr {
+      /* espaçamento vertical entre linhas */
+      margin-bottom: 10px;
+    }
+
+    .cozinha-corpo-pedidos td {
+      border-left: 8px solid #ccc;
+      padding: 10px;
+      background: white;
       border-radius: 5px;
-      cursor: pointer;
+      vertical-align: top;
+      width: 100px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+      font-size: 14px;
+      color: #333;
     }
-    button:hover {
-      background-color: #bf360c;
+
+    .cozinha-corpo-pedidos td strong {
+      display: inline-block;
+      width: 100px;
+      font-weight: 600;
+    }
+
+    .cozinha-corpo-pedidos td button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #2e8b57;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background-color 0.3s ease;
+    }
+
+    .cozinha-corpo-pedidos td button:hover {
+      background-color: #246b44;
     }
   </style>
 </head>
-<body>
-  <h1>Pedidos Recebidos</h1>
-  <div id="pedidos"></div>
+<body class="cozinha-body">
+  <h1 class="cozinha-title">Painel da Cozinha</h1>
 
-  <script>
-    async function carregarPedidos() {
-      try {
-        const res = await fetch("http://192.168.221.2:3000/pedidos");
-        const pedidos = await res.json();
+  <table class="cozinha-table">
+    <thead>
+      <tr id="cabecalho-mesas" class="cozinha-cabecalho-mesas"></tr>
+    </thead>
+    <tbody id="corpo-pedidos" class="cozinha-corpo-pedidos"></tbody>
+  </table>
 
-        const container = document.getElementById("pedidos");
-        container.innerHTML = "";
+ <script>
+  const TEMPO_COMENDO = 300000; // 5 minutos (você pode alterar para testar)
+  const mesasComendo = new Set(); // Armazena quais mesas estão "comendo"
 
-        pedidos
-          .filter(pedido => pedido.status !== "entregue") // só exibe pedidos não finalizados
-          .forEach(pedido => {
-            const div = document.createElement("div");
-            div.className = "pedido";
+  function buscarDados() {
+    fetch("http://localhost:3000/pedidos")
+      .then(res => res.json())
+      .then(data => {
+        atualizarCabecalhoMesas(data.mesas);
+        atualizarPedidos(data.pedidos);
+      })
+      .catch(erro => console.error("Erro ao buscar dados:", erro));
+  }
 
-            let html = `<div class="mesa">Mesa ${pedido.mesa}</div><ul>`;
-            pedido.itens.forEach(item => {
-              html += `<li>${item.nome} - R$ ${item.preco.toFixed(2)}</li>`;
-            });
-            html += `</ul><strong>Total: R$ ${pedido.total.toFixed(2)}</strong><br><br>`;
-            html += `<button onclick="finalizarPedido('${pedido.id}', this)">Finalizar Pedido</button>`;
+  function atualizarCabecalhoMesas(mesas) {
+    const cabecalho = document.getElementById("cabecalho-mesas");
+    cabecalho.innerHTML = "";
 
-            div.innerHTML = html;
+    mesas.forEach(mesa => {
+      const th = document.createElement("th");
+      th.textContent = `Mesa ${mesa.mesa}`;
 
-            container.appendChild(div);
-          });
-      } catch (err) {
-        console.error("Erro ao carregar pedidos:", err);
+      if (mesa.status === "comendo") {
+        th.style.backgroundColor = "#4fa3f7"; // azul: comendo
+      } else if (mesa.status === "aguardando") {
+        th.style.backgroundColor = "#f9d342"; // amarelo: aguardando
+      } else {
+        th.style.backgroundColor = "#69ce74"; // verde: livre
       }
+
+      cabecalho.appendChild(th);
+    });
+  }
+
+  function atualizarPedidos(pedidos) {
+    if (!Array.isArray(pedidos)) {
+      console.error("Pedidos inválidos recebidos:", pedidos);
+      return;
     }
 
-    async function finalizarPedido(id, botao) {
-      try {
-        const res = await fetch(`http://192.168.221.2:3000/pedidos/${id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ status: "entregue" })
-        });
+    const pedidosPorMesa = {};
 
-        if (res.ok) {
-          botao.closest(".pedido").remove();
-        } else {
-          alert("Erro ao finalizar o pedido.");
+    pedidos.forEach(pedido => {
+      if (!pedidosPorMesa[pedido.mesa]) {
+        pedidosPorMesa[pedido.mesa] = [];
+      }
+
+      if (pedido.status === "pendente" || pedido.status === "aguardando") {
+        pedidosPorMesa[pedido.mesa].push(pedido);
+      }
+    });
+
+    const corpo = document.getElementById("corpo-pedidos");
+    corpo.innerHTML = "";
+
+    // Calcula a quantidade máxima de pedidos em qualquer mesa
+    const maxPedidos = Math.max(...Object.values(pedidosPorMesa).map(p => p.length), 0);
+
+    for (let i = 0; i < maxPedidos; i++) {
+      const tr = document.createElement("tr");
+
+      Object.keys(pedidosPorMesa).forEach(mesa => {
+        const td = document.createElement("td");
+        const pedido = pedidosPorMesa[mesa][i];
+
+        if (pedido) {
+          const listaItens = pedido.itens.map(item => `• ${item.nome}`).join("<br>");
+          td.innerHTML = `
+            <strong>Pedido:</strong> ${pedido.id}<br>
+            ${listaItens}<br>
+            <strong>Total:</strong> R$${pedido.total}<br>
+            <button onclick="marcarComoEntregue('${pedido.id}', '${pedido.mesa}')">Entregar</button>
+          `;
         }
-      } catch (error) {
-        console.error("Erro ao conectar com o servidor:", error);
-        alert("Erro ao conectar com o servidor.");
-      }
-    }
 
-    carregarPedidos();
-    setInterval(carregarPedidos, 5500);
-  </script>
+        tr.appendChild(td);
+      });
+
+      corpo.appendChild(tr);
+    }
+  }
+
+  function marcarComoEntregue(id, mesa) {
+    fetch(`http://localhost:3000/pedidos/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ status: "entregue" })
+    })
+      .then(res => {
+        if (!res.ok) throw new Error(`Erro HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(() => {
+        mesasComendo.add(mesa);     // Marca a mesa como "comendo"
+        buscarDados();              // Atualiza interface
+
+        setTimeout(() => {
+          mesasComendo.delete(mesa); // Libera a mesa depois do tempo
+          buscarDados();             // Atualiza interface de novo
+        }, TEMPO_COMENDO);
+      })
+      .catch(err => console.error("Erro ao atualizar pedido:", err));
+  }
+
+  // Atualizações automáticas a cada 5 segundos
+  setInterval(buscarDados, 5000);
+  buscarDados(); // Primeira chamada
+</script>
+
 </body>
 </html>
-
