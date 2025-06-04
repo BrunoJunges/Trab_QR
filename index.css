@@ -1,4 +1,5 @@
 body {
+   font-size: 30px;
     font-family: Arial, sans-serif;
     background-color: #fff3e0;
     color: #333;
@@ -31,31 +32,58 @@ body {
     margin-bottom: 20px;
   }
   
-  .card {
-    background-color: #fff8e1;
-    padding: 10px;
-    border-radius: 10px;
-    width: 150px;
-    text-align: center;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-  }
+.card {
+  text-align: center;
+  position: relative;
+  margin: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
   
-  .card img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
+.card img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: inline-block;
+  margin: 0 auto;
+}
   
-  .card button {
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #ff7043;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.info-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #ff3c00; /* mesmo tom do botão Adicionar */
+  border: none;
+  border-radius: 13px; /* quadrado com cantos levemente arredondados */
+  width: 34px;
+  height: 34px;
+  font-size: 25px;
+  line-height: 24px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Botão de adicionar (agora separado) */
+.add-btn {
+  font-size: 40px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  background-color: #f87d57;
+  border: none;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: #e85a35;
+}
+
   
   .card button:hover {
     background-color: #ff5722;
@@ -67,11 +95,12 @@ body {
   }
   
   button {
-    padding: 10px 20px;
+     font-size: 60px;
+    padding: 10px 150px;
     background-color: #ef6c00;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
     display: block;
     margin: 10px auto 0;
@@ -147,3 +176,87 @@ body {
     font-size: 20px;
   }
     
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeSlide 0.6s ease forwards;
+}
+
+.explicacao {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff8e1;
+  color: #333;
+  padding: 20px 30px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  font-size: 1.1rem;
+  max-width: 80%;
+  text-align: center;
+}
+
+
+.card {
+  position: relative;
+  margin: 10px;
+  padding: 80px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 10px 15px 10px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.popup-descricao {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff8e1;
+  padding: 20px 25px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  z-index: 9999;
+  border-radius: 12px;
+  max-width: 90%;
+  max-height: 70%;
+  overflow-y: auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.popup-descricao .fechar-popup {
+  position: absolute;
+  top: 1px;
+  right: -100px;
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+}
+
+.popup-descricao h2 {
+  margin-top: 0;
+  margin-bottom: 5px ;
+}
+
+.popup-descricao p {
+  font-size: 36px;
+  line-height: 1;
+}
+
+
