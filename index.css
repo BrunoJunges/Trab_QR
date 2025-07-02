@@ -1,0 +1,262 @@
+body {
+   font-size: 30px;
+    font-family: Arial, sans-serif;
+    background-color: #fff3e0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 800px;
+    padding: 20px;
+    background-color: #ffe0b2;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1, h2 {
+    text-align: center;
+    color: #e65100;
+  }
+  
+  .menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+.card {
+  text-align: center;
+  position: relative;
+  margin: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+  
+.card img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: inline-block;
+  margin: 0 auto;
+}
+  
+.info-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #ff3c00; /* mesmo tom do botão Adicionar */
+  border: none;
+  border-radius: 13px; /* quadrado com cantos levemente arredondados */
+  width: 34px;
+  height: 34px;
+  font-size: 25px;
+  line-height: 24px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Botão de adicionar (agora separado) */
+.add-btn {
+  font-size: 40px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  background-color: #f87d57;
+  border: none;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: #e85a35;
+}
+
+  
+  .card button:hover {
+    background-color: #ff5722;
+  }
+  
+  #pedido {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  button {
+     font-size: 60px;
+    padding: 10px 150px;
+    background-color: #ef6c00;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto 0;
+  }
+  
+  button:hover {
+    background-color: #e65100;
+  }
+  
+  .popup {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+  }
+  
+  .popup-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+  }
+  
+  .popup-content img.qr-img {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .close {
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+    color: red;
+  }
+  .popup {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+  }
+  
+  .popup-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .popup-content img.qr-img {
+    width: 200px;
+    height: 200px;
+    margin-top: 15px;
+  }
+  
+  .popup-content .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+    
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeSlide 0.6s ease forwards;
+}
+
+.explicacao {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff8e1;
+  color: #333;
+  padding: 20px 30px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  font-size: 1.1rem;
+  max-width: 80%;
+  text-align: center;
+}
+
+
+.card {
+  position: relative;
+  margin: 10px;
+  padding: 80px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 10px 15px 10px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.popup-descricao {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff8e1;
+  padding: 20px 25px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  z-index: 9999;
+  border-radius: 12px;
+  max-width: 90%;
+  max-height: 70%;
+  overflow-y: auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.popup-descricao .fechar-popup {
+  position: absolute;
+  top: 1px;
+  right: -100px;
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+}
+
+.popup-descricao h2 {
+  margin-top: 0;
+  margin-bottom: 5px ;
+}
+
+.popup-descricao p {
+  font-size: 36px;
+  line-height: 1;
+}
+
+
