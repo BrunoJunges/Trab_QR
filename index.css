@@ -259,4 +259,56 @@ body {
   line-height: 1;
 }
 
+/* Flash rápido para o item adicionado */
+.flash {
+  animation: flashBackground 0.8s ease;
+}
+
+@keyframes flashBackground {
+  0% { background-color: #ffeb3b; }
+  100% { background-color: transparent; }
+}
+
+/* Pulsar no botão finalizar pedido */
+.pulse {
+  animation: pulseButton 1.2s infinite;
+}
+
+@keyframes pulseButton {
+  0%, 100% {
+    box-shadow: 0 0 10px #ef6c00;
+  }
+  50% {
+    box-shadow: 0 0 20px #f87d57;
+  }
+}
+
+.add-btn.clicked {
+  background-color: #e65100 !important; /* cor mais escura para o flash */
+  transform: scale(0.95);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.mensagem-flutuante {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #43a047;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 9999;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
 

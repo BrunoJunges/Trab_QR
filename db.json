@@ -363,6 +363,109 @@
       ],
       "total": 46,
       "status": "aguardando"
+    },
+    {
+      "id": "i7eo",
+      "mesa": "1",
+      "itens": [
+        {
+          "nome": "Batata Frita",
+          "preco": 15
+        }
+      ],
+      "total": 15,
+      "status": "aguardando"
+    },
+    {
+      "id": "xqft",
+      "mesa": "1",
+      "itens": [],
+      "total": 0,
+      "status": "aguardando"
+    },
+    {
+      "id": "ubqg",
+      "mesa": "1",
+      "itens": [
+        {
+          "nome": "Batata Frita",
+          "preco": 15
+        },
+        {
+          "nome": "À la Minuta",
+          "preco": 28
+        },
+        {
+          "nome": "Massa Alho e Óleo",
+          "preco": 22
+        },
+        {
+          "nome": "Pizza",
+          "preco": 35
+        }
+      ],
+      "total": 100,
+      "status": "aguardando"
+    },
+    {
+      "id": "ut54",
+      "mesa": "1",
+      "itens": [
+        {
+          "nome": "À la Minuta",
+          "preco": 28
+        },
+        {
+          "nome": "Batata Frita",
+          "preco": 15
+        },
+        {
+          "nome": "Massa Alho e Óleo",
+          "preco": 22
+        },
+        {
+          "nome": "Refrigerante",
+          "preco": 6
+        },
+        {
+          "nome": "Pizza",
+          "preco": 35
+        },
+        {
+          "nome": "Hamburguer",
+          "preco": 25
+        }
+      ],
+      "total": 131,
+      "status": "aguardando"
+    },
+    {
+      "id": "n2li",
+      "mesa": "1",
+      "itens": [
+        {
+          "nome": "Hamburguer",
+          "preco": 25
+        },
+        {
+          "nome": "Refrigerante",
+          "preco": 6
+        },
+        {
+          "nome": "Massa Alho e Óleo",
+          "preco": 22
+        },
+        {
+          "nome": "À la Minuta",
+          "preco": 28
+        },
+        {
+          "nome": "Batata Frita",
+          "preco": 15
+        }
+      ],
+      "total": 96,
+      "status": "aguardando"
     }
   ]
 }

@@ -1,2 +1,2 @@
 npm init -y
->> npm install express cors axios
+>> npm install express cors
