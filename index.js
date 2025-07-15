@@ -24,7 +24,7 @@ menuItems.forEach(item => {
   card.className = "card";
 
   card.innerHTML = `
-    <button class="info-btn" onclick="mostrarDescricao('${item.nome}', \`${item.descricao}\`)">?</button>
+    
     <img src="${item.imagem}" alt="${item.nome}">
     <h3>${item.nome}</h3>
     <p>R$ ${item.preco.toFixed(2)}</p>
